@@ -14,8 +14,8 @@ object Constants {
     const val GOLANG_PATH = "$GOLANG_BASE/path"
     const val GOLANG_BIND = "$GOLANG_BASE/bind"
     const val GOLANG_BINARY = "$GOLANG_PATH/bin"
-    const val GOLANG_OUTPUT = "$GOLANG_BASE/bridge.aar"
-    const val GOLANG_OUTPUT_SOURCES = "$GOLANG_BASE/bridge-sources.jar"
+    const val GOLANG_OUTPUT = "$GOLANG_BIND/bridge.aar"
+    const val GOLANG_OUTPUT_SOURCES = "$GOLANG_BIND/bridge-sources.jar"
 
     val STUB_GO_FILE_CONTENT = """
         package main
@@ -138,9 +138,6 @@ task("generateClashBindSources") {
 
         buildDir.resolve(Constants.GOLANG_BIND).apply {
             resolve("vendor").renameTo(resolve("src"))
-            resolve("go.mod").delete()
-            resolve("main.go").delete()
-            resolve("go.sum").delete()
         }
     }
 }
@@ -164,7 +161,7 @@ task("assembleClashCore") {
 
         "gomobile init".exec(pwd = bind, env = environment)
         "gomobile bind -target=android -trimpath github.com/kr328/cfa/bridge"
-            .exec(pwd = buildDir.resolve(Constants.GOLANG_BASE), env = environment)
+            .exec(pwd = buildDir.resolve(Constants.GOLANG_BIND), env = environment)
     }
 }
 
