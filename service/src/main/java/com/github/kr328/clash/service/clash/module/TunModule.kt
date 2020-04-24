@@ -5,11 +5,11 @@ import android.net.VpnService
 import android.os.Build
 import com.github.kr328.clash.common.Global
 import com.github.kr328.clash.common.ids.PendingIds
-import com.github.kr328.clash.common.utils.Log
 import com.github.kr328.clash.core.Clash
 import com.github.kr328.clash.service.util.parseCIDR
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.NullPointerException
 
 class TunModule(private val service: VpnService) : Module() {
     interface Configure {
@@ -33,8 +33,6 @@ class TunModule(private val service: VpnService) : Module() {
             val c = configure ?: throw IllegalArgumentException("Configure required")
 
             val builder = c.builder
-
-            Log.i("Tun start at ${c.gateway}, mirror at ${c.mirror}")
 
             parseCIDR(c.gateway).let {
                 builder.addAddress(it.ip, it.prefix)
@@ -66,8 +64,12 @@ class TunModule(private val service: VpnService) : Module() {
                 builder.setMetered(false)
             }
 
-            val fd = builder.establish()
-                ?: return@withContext c.onCreateTunFailure()
+            val fd = try {
+                builder.establish() ?: throw NullPointerException()
+            }
+            catch (e: Exception) {
+                return@withContext c.onCreateTunFailure()
+            }
 
             if (c.dnsHijacking) {
                 Clash.startTunDevice(
