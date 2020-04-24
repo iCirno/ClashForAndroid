@@ -96,6 +96,8 @@ class TunService : VpnService(), CoroutineScope by MainScope() {
     }
 
     override fun onDestroy() {
+        TunModule.requestStop()
+
         ServiceStatusProvider.serviceRunning = false
 
         service.broadcastClashStopped(reason)
@@ -139,7 +141,7 @@ class TunService : VpnService(), CoroutineScope by MainScope() {
             }
 
         override fun onCreateTunFailure() {
-            stopSelfForReason("Start VPN rejected by the system")
+            stopSelfForReason("Establish VPN rejected by system")
         }
     }
 
