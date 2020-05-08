@@ -7,7 +7,8 @@ A Graphical user interface of [clash](https://github.com/Dreamacro/clash) for An
 ### Feature
 
 Fully feature of [clash](https://github.com/Dreamacro/clash) ~~(Exclude `external-controller`~~
-Support [SSR](https://github.com/mzz2017/shadowsocksR)
+
+Support [ShadowsocksR](https://github.com/mzz2017/shadowsocksR)
 
 
 ### Requirement
